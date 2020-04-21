@@ -7,7 +7,12 @@ namespace Gym.Domain.Entities
     {
         public PeopleEntity People { get; set; }
         public UserEntity User { get; set; }
+        public ClientEntity Client { get; set; }
         public AddressEntity Address { get; set; }
-        public List<TelephoneEntity> Telephones { get; set; }
+        public PhisicalAvaliationEntity PhisicalAvaliation { get; set; }
+        public MetricsEntity Metrics { get; set; }
+
+        public List<TelephoneEntity> TelephonesCollection { get; set; }
+        public List<DiseaseEntity> DiseasesCollection { get; set; }
     }
 }

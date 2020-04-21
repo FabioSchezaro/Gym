@@ -29,6 +29,18 @@ namespace Gym.IoC
 
             service.AddSingleton<IDiseaseService, DiseaseService>();
             service.AddSingleton<IDiseaseRepository, DiseaseRepository>();
+
+            service.AddSingleton<IPlanService, PlanService>();
+            service.AddSingleton<IPlanRepository, PlanRepository>();
+
+            service.AddSingleton<IDueDayService, DueDayService>();
+            service.AddSingleton<IDueDayRepository, DueDayRepository>();
+
+            service.AddSingleton<IPhisicalAvaliationService, PhisicalAvaliationService>();
+            service.AddSingleton<IPhisicalAvaliationRepository, PhisicalAvaliationRepository>();
+
+            service.AddSingleton<IMetricsService, MetricsService>();
+            service.AddSingleton<IMetricsRepository, MetricsRepository>();
         }
     }
 }
