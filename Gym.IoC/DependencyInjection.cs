@@ -20,6 +20,15 @@ namespace Gym.IoC
 
             service.AddSingleton<IFullDataPeopleService, FullDataPeopleService>();
             service.AddSingleton<IPeopleRepository, PeopleRepository>();
+
+            service.AddSingleton<ITelephoneService, TelephoneService>();
+            service.AddSingleton<ITelephoneRepository, TelephoneRepository>();
+
+            service.AddSingleton<IAddressService, AddressService>();
+            service.AddSingleton<IAddressRepository, AddressRepository>();
+
+            service.AddSingleton<IDiseaseService, DiseaseService>();
+            service.AddSingleton<IDiseaseRepository, DiseaseRepository>();
         }
     }
 }

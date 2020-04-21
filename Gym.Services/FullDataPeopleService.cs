@@ -14,12 +14,21 @@ namespace Gym.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPeopleRepository _peopleRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ITelephoneRepository _telephoneRepository;
+        private readonly IAddressRepository _addressRepository;
 
-        public FullDataPeopleService(IUnitOfWork unitOfWork, IPeopleRepository peopleRepository, IUserRepository userRepository)
+        public FullDataPeopleService(
+            IUnitOfWork unitOfWork, 
+            IPeopleRepository peopleRepository, 
+            IUserRepository userRepository,
+            ITelephoneRepository telephoneRepository,
+            IAddressRepository addressRepository)
         {
             _unitOfWork = unitOfWork;
             _peopleRepository = peopleRepository;
             _userRepository = userRepository;
+            _telephoneRepository = telephoneRepository;
+            _addressRepository = addressRepository;
         }
         public Task<bool> Delete(FullDataPeopleEntity people)
         {
@@ -34,6 +43,7 @@ namespace Gym.Services
                 {
                     var fullPeoples = new List<FullDataPeopleEntity>();
                     var peoples = new List<PeopleEntity>();
+                    var telephones = new List<TelephoneEntity>();
 
                     peoples = _peopleRepository.GetAll(_unitOfWork.GetConnection()).Result;
 
@@ -44,6 +54,9 @@ namespace Gym.Services
                         fullPeople.People = people;
                         fullPeople.User = _userRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
                         fullPeople.User.Password = "";
+
+                        fullPeople.Telephones = _telephoneRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
+                        fullPeople.Address = _addressRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
 
                         fullPeoples.Add(fullPeople);
                     }

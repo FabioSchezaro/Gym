@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Gym.Domain.Interfaces.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Gym.Infra.Data.Sql
                     connection.Insert(entity, transaction);
                     return true;
                 }
-                catch
+                catch (Exception e)
                 {
                     return false;
                 }
