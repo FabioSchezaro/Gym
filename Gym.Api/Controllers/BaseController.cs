@@ -5,7 +5,7 @@ namespace Gym.Api.Controllers
 {
     [Produces("application/json")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class BaseController : ControllerBase
     {
     }

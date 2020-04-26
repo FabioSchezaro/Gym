@@ -17,7 +17,6 @@ namespace Gym.Api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult<dynamic>> GetAll()
         {
             var users = await _userService.GetAll();
@@ -28,7 +27,6 @@ namespace Gym.Api.Controllers
             return BadRequest(new { message = "Não há usuários para mostrar" });
         }
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<ActionResult<dynamic>> GetBtId(Guid id)
         {
             var user = await _userService.GetById(id);
@@ -38,8 +36,7 @@ namespace Gym.Api.Controllers
 
             return BadRequest(new { message = "Usuário não encontrado, verifique os dados de sua busca." });
         }
-        [HttpPost]
-        [Route("Authenticate")]
+        [HttpPost("Authenticate")]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate(UserEntity entity)
         {
@@ -51,7 +48,7 @@ namespace Gym.Api.Controllers
             var token = Token.Service.TokenService.GenerateToken(user);
             user.Password = "";
 
-            return Ok(new { user, token });
+            return Ok(new { user, Token = token });
         }
     }
 }

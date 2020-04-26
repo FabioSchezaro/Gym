@@ -18,7 +18,7 @@ namespace Gym.IoC
             service.AddSingleton<IUserRepository, UserRepository>();
             service.AddSingleton<IUserService, UserService>();
 
-            service.AddSingleton<IFullDataPeopleService, FullDataPeopleService>();
+            service.AddSingleton<IPeopleService, PeopleService>();
             service.AddSingleton<IPeopleRepository, PeopleRepository>();
 
             service.AddSingleton<ITelephoneService, TelephoneService>();
@@ -41,6 +41,9 @@ namespace Gym.IoC
 
             service.AddSingleton<IMetricsService, MetricsService>();
             service.AddSingleton<IMetricsRepository, MetricsRepository>();
+
+            service.AddSingleton<IFullDataPeopleService, FullDataPeopleService>();
+            service.AddSingleton<IClientRepository, ClientRepository>();
         }
     }
 }
