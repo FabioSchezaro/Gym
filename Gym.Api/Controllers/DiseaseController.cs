@@ -39,7 +39,7 @@ namespace Gym.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<dynamic>> Delete(DiseaseEntity disease)
+        public async Task<ActionResult<dynamic>> Delete([FromHeader] DiseaseEntity disease)
         {
             var delete = await _diseaseService.Delete(disease);
 

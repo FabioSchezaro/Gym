@@ -2,6 +2,7 @@
 using Gym.Domain.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gym.Api.Controllers
@@ -38,7 +39,7 @@ namespace Gym.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<dynamic>> Delete(PlanEntity plan)
+        public async Task<ActionResult<dynamic>> Delete([FromHeader] PlanEntity plan)
         {
             var delete = await _planService.Delete(plan);
 
@@ -65,7 +66,7 @@ namespace Gym.Api.Controllers
             var plans = await _planService.GetAll();
 
             if (plans != null)
-                return Ok(plans);
+                return Ok(plans.OrderBy(d => d.Description));
 
             return BadRequest(new { message = "Nenhum plano encontrado." });
         }

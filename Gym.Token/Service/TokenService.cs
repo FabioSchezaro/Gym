@@ -19,9 +19,7 @@ namespace Gym.Token.Service
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName.ToString()),
-                    //new Claim(ClaimTypes.us, user.UserName.ToString()),
-                    //new Claim(ClaimTypes.Role, user.Role.ToString())
+                    new Claim(ClaimTypes.Name, user.UserName.ToString())
                 }),
                 Issuer = SecurityConsts.Issuer,
                 Expires = DateTime.UtcNow.AddHours(SecurityConsts.AccessTokenExpireHours),
