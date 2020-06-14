@@ -2,7 +2,7 @@
 {
     public enum RoleTypeEnum
     {
-        Gerente,
-        Funcionario
+        Funcionario,
+        Aluno
     }
 }

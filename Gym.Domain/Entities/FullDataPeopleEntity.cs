@@ -1,5 +1,4 @@
-﻿using Gym.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Gym.Domain.Entities
 {
@@ -12,7 +11,7 @@ namespace Gym.Domain.Entities
         public PhisicalAvaliationEntity PhisicalAvaliation { get; set; }
         public MetricsEntity Metrics { get; set; }
 
-        public List<TelephoneEntity> TelephonesCollection { get; set; }
         public List<DiseaseEntity> DiseasesCollection { get; set; }
+        public List<PeopleDiseaseEntity> PeopleDiseasesCollection { get; set; }
     }
 }

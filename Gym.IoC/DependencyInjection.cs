@@ -44,6 +44,10 @@ namespace Gym.IoC
 
             service.AddSingleton<IFullDataPeopleService, FullDataPeopleService>();
             service.AddSingleton<IClientRepository, ClientRepository>();
+            service.AddSingleton<IPeopleDiseaseRepository, PeopleDiseaseRepository>();
+
+            service.AddSingleton<IRoleService, RoleService>();
+            service.AddSingleton<IRoleRepository, RoleRepository>();
         }
     }
 }

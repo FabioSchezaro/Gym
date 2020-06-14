@@ -40,7 +40,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _userRepository.Delete(user, _unitOfWork.GetConnection());
+                return _userRepository.DeleteAsync(user, _unitOfWork.GetConnection());
             });
         }
 
@@ -64,7 +64,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _userRepository.Insert(user, _unitOfWork.GetConnection());
+                return _userRepository.InsertAsync(user, _unitOfWork.GetConnection());
             });
         }
 
@@ -72,7 +72,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _userRepository.Update(user, _unitOfWork.GetConnection());
+                return _userRepository.UpdateAsync(user, _unitOfWork.GetConnection());
             });
         }
     }

@@ -9,5 +9,6 @@ namespace Gym.Domain.Interfaces.IRepositories
     {
         Task<UserEntity> GetByUserName(string userName, IDbConnection connection, IDbTransaction transaction = null);
         Task<UserEntity> GetByIdPeople(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
+        Task<bool> DeleteByIdPeopleAsync(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
     }
 }

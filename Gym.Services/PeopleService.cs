@@ -21,7 +21,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _peopleRepository.Delete(people, _unitOfWork.GetConnection());
+                return _peopleRepository.DeleteAsync(people, _unitOfWork.GetConnection());
             });
         }
 
@@ -30,6 +30,14 @@ namespace Gym.Services
             return Task.Run(() =>
             {
                 return _peopleRepository.GetAll(_unitOfWork.GetConnection());
+            });
+        }
+
+        public Task<List<PeopleEntity>> GetByName(string name)
+        {
+            return Task.Run(() =>
+            {
+                return _peopleRepository.GetByName(name, _unitOfWork.GetConnection());
             });
         }
 
@@ -45,7 +53,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _peopleRepository.Insert(people, _unitOfWork.GetConnection());
+                return _peopleRepository.InsertAsync(people, _unitOfWork.GetConnection());
             });
         }
 
@@ -53,7 +61,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _peopleRepository.Update(people, _unitOfWork.GetConnection());
+                return _peopleRepository.UpdateAsync(people, _unitOfWork.GetConnection());
             });
         }
     }

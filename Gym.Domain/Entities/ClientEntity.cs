@@ -8,6 +8,9 @@ namespace Gym.Domain.Entities
     public class ClientEntity : GuidEntity
     {
         public Guid IdPeople { get; set; }
+        public Guid IdPlan { get; set; }
+        public Guid IdDueDay { get; set; }
+
         public PlanEntity Plan { get; set; }
         public DueDayEntity DueDay { get; set; }
     }

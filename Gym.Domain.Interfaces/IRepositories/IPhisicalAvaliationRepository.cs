@@ -8,5 +8,6 @@ namespace Gym.Domain.Interfaces.IRepositories
     public interface IPhisicalAvaliationRepository : IBaseCrud<PhisicalAvaliationEntity, Guid>
     {
         Task<PhisicalAvaliationEntity> GetByIdPeople(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
+        Task<bool> DeleteByIdPeopleAsync(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
     }
 }

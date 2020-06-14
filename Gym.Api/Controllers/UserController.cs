@@ -11,9 +11,11 @@ namespace Gym.Api.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IPeopleService _peopleService;
+        public UserController(IUserService userService, IPeopleService peopleService)
         {
             _userService = userService;
+            _peopleService = peopleService;
         }
 
         [HttpGet]
@@ -47,8 +49,9 @@ namespace Gym.Api.Controllers
 
             var token = Token.Service.TokenService.GenerateToken(user);
             user.Password = "";
+            var people = await _peopleService.GetById(user.IdPeople);
 
-            return Ok(new { user, Token = token });
+            return Ok(new { user, Token = token, People = people });
         }
     }
 }

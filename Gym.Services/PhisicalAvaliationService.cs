@@ -21,7 +21,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _phisicalAvaliationRepository.Delete(phisicalAvaliation, _unitOfWork.GetConnection());
+                return _phisicalAvaliationRepository.DeleteAsync(phisicalAvaliation, _unitOfWork.GetConnection());
             });
         }
 
@@ -45,7 +45,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _phisicalAvaliationRepository.Insert(phisicalAvaliation, _unitOfWork.GetConnection());
+                return _phisicalAvaliationRepository.InsertAsync(phisicalAvaliation, _unitOfWork.GetConnection());
             });
         }
 
@@ -53,7 +53,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _phisicalAvaliationRepository.Update(phisicalAvaliation, _unitOfWork.GetConnection());
+                return _phisicalAvaliationRepository.UpdateAsync(phisicalAvaliation, _unitOfWork.GetConnection());
             });
         }
     }

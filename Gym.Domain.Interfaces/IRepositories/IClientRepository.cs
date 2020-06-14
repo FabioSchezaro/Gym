@@ -8,5 +8,6 @@ namespace Gym.Domain.Interfaces.IRepositories
     public interface IClientRepository : IBaseCrud<ClientEntity, Guid>
     {
         Task<ClientEntity> GetByIdPeople(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
+        Task<bool> DeleteByIdPeopleAsync(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null);
     }
 }

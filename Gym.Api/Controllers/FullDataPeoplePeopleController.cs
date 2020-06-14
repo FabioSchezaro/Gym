@@ -1,6 +1,5 @@
 ﻿using Gym.Domain.Entities;
 using Gym.Domain.Interfaces.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -37,15 +36,38 @@ namespace Gym.Api.Controllers
 
             return BadRequest(new { message = "Não há pessoas para mostrar." });
         }
-        [HttpPost]
-        public async Task<ActionResult<dynamic>> Insert(FullDataPeopleEntity entity)
-        {
-            var people = await _fullDataPeopleService.Insert(entity);
 
-            if (people != null)
-                return Ok(people);
+        [HttpPost]
+        public async Task<ActionResult<dynamic>> Insert(FullDataPeopleEntity fullDataPeopleEntity)
+        {
+            var insert = await _fullDataPeopleService.InsertAsync(fullDataPeopleEntity);
+
+            if (insert)
+                return Ok(new { message = "Salvo com sucesso." });
 
             return BadRequest(new { message = "Erro ao salvar." });
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<dynamic>> Update(FullDataPeopleEntity fullDataPeopleEntity)
+        {
+            var update = await _fullDataPeopleService.UpdateAsync(fullDataPeopleEntity);
+
+            if (update)
+                return Ok(new { message = "Dados atualizados com sucesso" });
+
+            return BadRequest(new { message = "Erro ao atualizar dados." });
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<dynamic>> Delete([FromHeader] PeopleEntity people)
+        {
+            var delete = await _fullDataPeopleService.DeleteAsync(people);
+
+            if (delete)
+                return Ok(new { message = "Dados apagados com sucesso" });
+
+            return BadRequest(new { message = "Erro ao apagar dados." });
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _addressRepository.Delete(address, _unitOfWork.GetConnection());
+                return _addressRepository.DeleteAsync(address, _unitOfWork.GetConnection());
             });
         }
 
@@ -46,7 +46,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _addressRepository.Insert(address, _unitOfWork.GetConnection());
+                return _addressRepository.InsertAsync(address, _unitOfWork.GetConnection());
             });
         }
 
@@ -54,7 +54,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _addressRepository.Update(address, _unitOfWork.GetConnection());
+                return _addressRepository.UpdateAsync(address, _unitOfWork.GetConnection());
             });
         }
     }

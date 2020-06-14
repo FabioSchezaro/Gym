@@ -12,5 +12,6 @@ namespace Gym.Domain.Interfaces.IServices
         Task<bool> Delete(PeopleEntity people);
         Task<List<PeopleEntity>> GetAll();
         Task<PeopleEntity> GetById(Guid id);
+        Task<List<PeopleEntity>> GetByName(string name);
     }
 }

@@ -21,7 +21,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _telephoneRepository.Delete(telephone, _unitOfWork.GetConnection());
+                return _telephoneRepository.DeleteAsync(telephone, _unitOfWork.GetConnection());
             });
         }
 
@@ -45,7 +45,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _telephoneRepository.Insert(telephone, _unitOfWork.GetConnection());
+                return _telephoneRepository.InsertAsync(telephone, _unitOfWork.GetConnection());
             });
         }
 
@@ -53,7 +53,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _telephoneRepository.Update(telephone, _unitOfWork.GetConnection());
+                return _telephoneRepository.UpdateAsync(telephone, _unitOfWork.GetConnection());
             });
         }
     }

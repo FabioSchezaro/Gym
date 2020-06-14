@@ -25,13 +25,13 @@ namespace Gym.Infra.Data.Sql
                 return connection.Get<TEntity>(id);
             });
         }
-        public virtual Task<bool> Insert(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
+        public virtual Task<bool> InsertAsync(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    connection.Insert(entity, transaction);
+                    connection.InsertAsync(entity, transaction);
                     return true;
                 }
                 catch (Exception e)
@@ -40,18 +40,32 @@ namespace Gym.Infra.Data.Sql
                 }
             });
         }
-        public virtual Task<bool> Update(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
+        public virtual Task<bool> UpdateAsync(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
         {
             return Task.Run(() =>
             {
-                return connection.Update(entity, transaction);
+                try
+                {
+                    return connection.UpdateAsync(entity, transaction);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             });
         }
-        public virtual Task<bool> Delete(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
+        public virtual Task<bool> DeleteAsync(TEntity entity, IDbConnection connection, IDbTransaction transaction = null)
         {
             return Task.Run(() =>
             {
-                return connection.Delete(entity, transaction);
+                try
+                {
+                    return connection.DeleteAsync(entity, transaction);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
             });
         }
     }

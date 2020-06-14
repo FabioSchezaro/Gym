@@ -29,5 +29,15 @@ namespace Gym.Infra.Data.Sql
                 return connection.QueryAsync<UserEntity>(sql, new { userName }).Result.FirstOrDefault();
             });
         }
+
+        public Task<bool> DeleteByIdPeopleAsync(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                var sql = @"DELETE FROM dbo.Users WHERE IdPeople = @idPeople";
+
+                return connection.Execute(sql, new { idPeople }, transaction) > 0 ? true : false;
+            });
+        }
     }
 }

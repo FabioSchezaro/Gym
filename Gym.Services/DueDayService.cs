@@ -4,6 +4,7 @@ using Gym.Domain.Interfaces.IServices;
 using Gym.Domain.Interfaces.IUnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Gym.Services
@@ -21,7 +22,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _dueDayRepository.Delete(dueDay, _unitOfWork.GetConnection());
+                return _dueDayRepository.DeleteAsync(dueDay, _unitOfWork.GetConnection());
             });
         }
 
@@ -29,7 +30,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _dueDayRepository.GetAll(_unitOfWork.GetConnection());
+                return _dueDayRepository.GetAll(_unitOfWork.GetConnection()). Result.OrderBy(x => x.Day).ToList();
             });
         }
 
@@ -45,7 +46,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _dueDayRepository.Insert(dueDay, _unitOfWork.GetConnection());
+                return _dueDayRepository.InsertAsync(dueDay, _unitOfWork.GetConnection());
             });
         }
 
@@ -53,7 +54,7 @@ namespace Gym.Services
         {
             return Task.Run(() =>
             {
-                return _dueDayRepository.Update(dueDay, _unitOfWork.GetConnection());
+                return _dueDayRepository.UpdateAsync(dueDay, _unitOfWork.GetConnection());
             });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Gym.Domain.Entities;
+using Gym.Domain.Enuns;
 using Gym.Domain.Interfaces.IRepositories;
 using Gym.Domain.Interfaces.IServices;
 using Gym.Domain.Interfaces.IUnitOfWork;
@@ -19,7 +20,9 @@ namespace Gym.Services
         private readonly IMetricsRepository _metricsRepository;
         private readonly ITelephoneRepository _telephoneRepository;
         private readonly IDiseaseRepository _diseaseRepository;
-
+        private readonly IPeopleDiseaseRepository _peopleDiseaseRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IPlanRepository _planRepository;
 
         public FullDataPeopleService(
             IUnitOfWork unitOfWork,
@@ -30,7 +33,10 @@ namespace Gym.Services
             IPhisicalAvaliationRepository phisicalAvaliationRepository,
             IMetricsRepository metricsRepository,
             ITelephoneRepository telephoneRepository,
-            IDiseaseRepository diseaseRepository)
+            IDiseaseRepository diseaseRepository,
+            IPeopleDiseaseRepository peopleDiseaseRepository,
+            IRoleRepository roleRepository,
+            IPlanRepository planRepository)
         {
             _unitOfWork = unitOfWork;
             _peopleRepository = peopleRepository;
@@ -41,31 +47,20 @@ namespace Gym.Services
             _metricsRepository = metricsRepository;
             _telephoneRepository = telephoneRepository;
             _diseaseRepository = diseaseRepository;
-
+            _peopleDiseaseRepository = peopleDiseaseRepository;
+            _roleRepository = roleRepository;
+            _planRepository = planRepository;
         }
-        public Task<bool> Delete(FullDataPeopleEntity people)
+        public Task<bool> DeleteAsync(PeopleEntity people)
         {
             return Task.Run(() =>
             {
                 var transaction = _unitOfWork.GetTransaction();
                 try
                 {
-                    foreach (var telephone in people.TelephonesCollection)
-                    {
-                        _telephoneRepository.Delete(telephone, _unitOfWork.GetConnection(), transaction);
-                    }
-
-                    foreach (var disease in people.DiseasesCollection)
-                    {
-                        _diseaseRepository.Delete(disease, _unitOfWork.GetConnection(), transaction);
-                    }
-
-                    _metricsRepository.Delete(people.Metrics, _unitOfWork.GetConnection(), transaction);
-                    _phisicalAvaliationRepository.Delete(people.PhisicalAvaliation, _unitOfWork.GetConnection(), transaction);
-                    _addressRepository.Delete(people.Address, _unitOfWork.GetConnection(), transaction);
-                    _clientRepository.Delete(people.Client, _unitOfWork.GetConnection(), transaction);
-                    _userRepository.Delete(people.User, _unitOfWork.GetConnection(), transaction);
-                    _peopleRepository.Delete(people.People, _unitOfWork.GetConnection(), transaction);
+                    people = _peopleRepository.GetById(people.Id, _unitOfWork.GetConnection()).Result;
+                    people.Active = PeopleActiveEnum.Inative;
+                    var r = _peopleRepository.UpdateAsync(people, _unitOfWork.GetConnection(), transaction).Result;
 
                     _unitOfWork.Commit();
                     return true;
@@ -85,25 +80,20 @@ namespace Gym.Services
                 try
                 {
                     var fullPeoples = new List<FullDataPeopleEntity>();
-                    var peoples = new List<PeopleEntity>();
-                    var telephones = new List<TelephoneEntity>();
-
-                    peoples = _peopleRepository.GetAll(_unitOfWork.GetConnection()).Result;
-
+                    var peoples = _peopleRepository.GetAll(_unitOfWork.GetConnection()).Result;
+                    
                     foreach (var people in peoples)
                     {
                         var fullPeople = new FullDataPeopleEntity();
 
                         fullPeople.People = people;
                         fullPeople.User = _userRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
-                        fullPeople.User.Password = "";
 
-                        fullPeople.Client = _clientRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
+                        //fullPeople.Client = _clientRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
                         fullPeople.Address = _addressRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
                         fullPeople.PhisicalAvaliation = _phisicalAvaliationRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
                         fullPeople.Metrics = _metricsRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
 
-                        fullPeople.TelephonesCollection = _telephoneRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
                         fullPeople.DiseasesCollection = _diseaseRepository.GetByIdPeople(people.Id, _unitOfWork.GetConnection()).Result;
 
                         fullPeoples.Add(fullPeople);
@@ -128,14 +118,12 @@ namespace Gym.Services
 
                     fullPeople.People = _peopleRepository.GetById(id, _unitOfWork.GetConnection()).Result;
                     fullPeople.User = _userRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
-                    fullPeople.User.Password = "";
 
                     fullPeople.Client = _clientRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
                     fullPeople.Address = _addressRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
                     fullPeople.PhisicalAvaliation = _phisicalAvaliationRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
                     fullPeople.Metrics = _metricsRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
 
-                    fullPeople.TelephonesCollection = _telephoneRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
                     fullPeople.DiseasesCollection = _diseaseRepository.GetByIdPeople(id, _unitOfWork.GetConnection()).Result;
 
                     return fullPeople;
@@ -147,28 +135,35 @@ namespace Gym.Services
             });
         }
 
-        public Task<bool> Insert(FullDataPeopleEntity people)
+        public Task<bool> InsertAsync(FullDataPeopleEntity people)
         {
             return Task.Run(() =>
             {
                 var transaction = _unitOfWork.GetTransaction();
                 try
                 {
-                    _peopleRepository.Insert(people.People, _unitOfWork.GetConnection(), transaction);
-                    _userRepository.Insert(people.User, _unitOfWork.GetConnection(), transaction);
-                    _clientRepository.Insert(people.Client, _unitOfWork.GetConnection(), transaction);
-                    _addressRepository.Insert(people.Address, _unitOfWork.GetConnection(), transaction);
-                    _phisicalAvaliationRepository.Insert(people.PhisicalAvaliation, _unitOfWork.GetConnection(), transaction);
-                    _metricsRepository.Insert(people.Metrics, _unitOfWork.GetConnection(), transaction);
+                    people.People.Active = PeopleActiveEnum.Active;
+                    _peopleRepository.InsertAsync(people.People, _unitOfWork.GetConnection(), transaction);
+                    _userRepository.InsertAsync(people.User, _unitOfWork.GetConnection(), transaction);
+                    
+                    if (people.Client != null) 
+                        _clientRepository.InsertAsync(people.Client, _unitOfWork.GetConnection(), transaction);
+                    
+                    if (people.Address != null)
+                        _addressRepository.InsertAsync(people.Address, _unitOfWork.GetConnection(), transaction);
 
-                    foreach (var telephone in people.TelephonesCollection)
-                    {
-                        _telephoneRepository.Insert(telephone, _unitOfWork.GetConnection(), transaction);
-                    }
+                    if (people.PhisicalAvaliation != null)
+                        _phisicalAvaliationRepository.InsertAsync(people.PhisicalAvaliation, _unitOfWork.GetConnection(), transaction);
 
-                    foreach (var disease in people.DiseasesCollection)
+                    if (people.Metrics != null)
+                        _metricsRepository.InsertAsync(people.Metrics, _unitOfWork.GetConnection(), transaction);
+
+                    if (people.DiseasesCollection != null)
                     {
-                        _diseaseRepository.Insert(disease, _unitOfWork.GetConnection(), transaction);
+                        foreach (var disease in people.DiseasesCollection)
+                        {
+                            _diseaseRepository.InsertAsync(disease, _unitOfWork.GetConnection(), transaction);
+                        }
                     }
 
                     _unitOfWork.Commit();
@@ -182,28 +177,51 @@ namespace Gym.Services
             });
         }
 
-        public Task<bool> Update(FullDataPeopleEntity people)
+        public Task<bool> UpdateAsync(FullDataPeopleEntity people)
         {
             return Task.Run(() =>
             {
                 var transaction = _unitOfWork.GetTransaction();
                 try
                 {
-                    _peopleRepository.Update(people.People, _unitOfWork.GetConnection(), transaction);
-                    _userRepository.Update(people.User, _unitOfWork.GetConnection(), transaction);
-                    _clientRepository.Update(people.Client, _unitOfWork.GetConnection(), transaction);
-                    _addressRepository.Update(people.Address, _unitOfWork.GetConnection(), transaction);
-                    _phisicalAvaliationRepository.Update(people.PhisicalAvaliation, _unitOfWork.GetConnection(), transaction);
-                    _metricsRepository.Update(people.Metrics, _unitOfWork.GetConnection(), transaction);
+                    _peopleRepository.UpdateAsync(people.People, _unitOfWork.GetConnection(), transaction);
+                    people.User.Password = Token.Security.CryptHelper.EncryptPassword(people.User.Password);
+                    _userRepository.UpdateAsync(people.User, _unitOfWork.GetConnection(), transaction);
 
-                    foreach (var telephone in people.TelephonesCollection)
+                    if (people.Client != null)
                     {
-                        _telephoneRepository.Update(telephone, _unitOfWork.GetConnection(), transaction);
+                        _clientRepository.DeleteByIdPeopleAsync(people.People.Id, _unitOfWork.GetConnection(), transaction);
+                        _clientRepository.InsertAsync(people.Client, _unitOfWork.GetConnection(), transaction);
                     }
 
-                    foreach (var disease in people.DiseasesCollection)
+                    if (people.Address != null)
                     {
-                        _diseaseRepository.Update(disease, _unitOfWork.GetConnection(), transaction);
+                        _addressRepository.DeleteByIdPeopleAsync(people.People.Id, _unitOfWork.GetConnection(), transaction);
+                        _addressRepository.InsertAsync(people.Address, _unitOfWork.GetConnection(), transaction);
+                    }
+
+                    if (people.PhisicalAvaliation != null)
+                    {
+                        _phisicalAvaliationRepository.DeleteByIdPeopleAsync(people.People.Id, _unitOfWork.GetConnection(), transaction);
+                        _phisicalAvaliationRepository.InsertAsync(people.PhisicalAvaliation, _unitOfWork.GetConnection(), transaction);
+                    }
+                    
+
+                    if (people.Metrics != null)
+                    {
+                        _metricsRepository.DeleteByIdPeopleAsync(people.People.Id, _unitOfWork.GetConnection(), transaction);
+                        _metricsRepository.InsertAsync(people.Metrics, _unitOfWork.GetConnection(), transaction);
+                    }
+                        
+
+                    if (people.PeopleDiseasesCollection != null)
+                    {
+                        _peopleDiseaseRepository.DeleteByIdPeopleAsync(people.People.Id, _unitOfWork.GetConnection(), transaction);
+
+                        foreach (var peopleDisease in people.PeopleDiseasesCollection)
+                        {
+                            _peopleDiseaseRepository.InsertAsync(peopleDisease, _unitOfWork.GetConnection(), transaction);
+                        }
                     }
 
                     _unitOfWork.Commit();

@@ -20,7 +20,7 @@ namespace Gym.Infra.Data.Sql
                             where c.IdPeople = @idPeople";
 
                 return connection.QueryAsync<ClientEntity, PlanEntity, DueDayEntity, ClientEntity>(
-                    sql, 
+                    sql,
                     (client, plan, dueDay) =>
                     {
                         client.Plan = plan;
@@ -35,6 +35,16 @@ namespace Gym.Infra.Data.Sql
                 .FirstOrDefault();
             });
         }
-  
+
+        public Task<bool> DeleteByIdPeopleAsync(Guid idPeople, IDbConnection connection, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                var sql = @"DELETE FROM dbo.Client WHERE IdPeople = @idPeople";
+
+                return connection.Execute(sql, new { idPeople }, transaction) > 0 ? true : false;
+            });
+        }
+
     }
 }
